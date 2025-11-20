@@ -117,6 +117,15 @@ const User = {  // sequelize 인스턴스 초기화 함수와 associate 함수�
     };
 
     return define;
+  },
+   associate: (db) => {
+    // hasMany - 1:n 관계에서 설정하는 방법 (1명의 사원은 복수의 직급 정보를 가진다.)
+    // hasOne - 1:1 관계
+    db.User.hasMany(db.Post, {sourceKey: 'id', foreignKey: 'userId', as: 'u-has-posts' }); // sourceKey는 User에서 가져온 거고 foreinKey는 Post테이블에서 가져온 것.
+    db.User.hasMany(db.Comment, {sourceKey: 'id', foreignKey: 'userId', as: 'u-has-comts' }); // sourceKey는 User에서 가져온 거고 foreinKey는 Comment테이블에서 가져온 것.
+    db.User.hasMany(db.Like, {sourceKey: 'id', foreignKey: 'userId', as: 'u-has-likes' }); // sourceKey는 User에서 가져온 거고 foreinKey는 Like테이블에서 가져온 것.
+    db.User.hasMany(db.PushSubscription, {sourceKey: 'id', foreignKey: 'userId', as: 'u-has-p-subs' }); // sourceKey는 User에서 가져온 거고 foreinKey는 PushSubscription테이블에서 가져온 것.
+    db.User.hasMany(db.Notification, {sourceKey: 'id', foreignKey: 'userId', as: 'u-has-ntfs' }); // sourceKey는 User에서 가져온 거고 foreinKey는 Notification테이블에서 가져온 것.
   }
 }
 
