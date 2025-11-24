@@ -21,17 +21,21 @@ import { createBaseResponse } from "../utils/createBaseResponse.util.js";
  * @returns
  */
 async function login(req, res, next) {
-  try {
-    const body = req.body; // 파라미터 획득
 
+  // todo: logger.debug() 지우기
+  try {
+    logger.debug('------------------로그인 컨트롤러 시작--------------------')
+    const body = req.body; // 파라미터 획득
+    logger.debug(body.email);
     // 로그인 서비스 호출
     const result = await authService.login(body);
+    logger.debug('------------------로그인 컨트롤러 끝--------------------')
     return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
   }
   catch(error) {
-    return res.status(500).send(error.message);
+    next(error);
   }
-}
+};
 
 // --------------------------------------------------------------------------------------
 // export--------------------------------------------------------------------------------

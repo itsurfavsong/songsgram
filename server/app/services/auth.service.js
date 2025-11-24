@@ -5,6 +5,8 @@
  */
 import bcrypt, { compareSync } from 'bcrypt';
 import userRepository from "../repositories/user.repository.js";
+import myError from '../errors/customs/my.error.js';
+import { NOT_REGISTERED_ERROR, SYSTEM_ERROR } from '../../configs/responseCode.config.js';
 
 async function login(body) {
   const { email, password } = body;
@@ -16,12 +18,12 @@ async function login(body) {
 
   // 유저 존재 여부 체크
   if(!result) {
-    throw new Error('유저 없음'); // 에러를 강제 발생 시켰잖아 우리가
+    throw myError('유저 미존재', NOT_REGISTERED_ERROR); // 에러를 강제 발생
   }
 
   // 비밀번호 체크
   if(!bcrypt.compareSync(password, result.password)) {
-    throw new Error('비밀번호 틀림'); // 에러를 강제 발생 시켰잖아 우리가
+    throw myError('비밀번호 틀림', NOT_REGISTERED_ERROR); // 에러를 강제 발생
   }
 
   return result;

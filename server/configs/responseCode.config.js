@@ -23,7 +23,6 @@ const SUCCESS = {
   description: '정상 처리',
   status: 200
 }
-
 Object.freeze(SUCCESS); // object를 바꾸지 말도록 고정하는 것. 즉 각각의 데이터 타입을 변하지 않게 하려고.
 
 /**
@@ -36,24 +35,48 @@ const NOT_REGISTERED_ERROR = {
   description: '아이디나 비밀번호가 틀렸습니다.',
   status: 400 // 나쁜 request가 왔다라는 의미
 }
-
 Object.freeze(NOT_REGISTERED_ERROR);
 
 /**
  * 파라미터 에러 응답 코드 설정
  * @type {ResponseCodeConfig}
- */
+*/
 const BAD_REQUEST_ERROR = {
   code: 'E21',
   info: 'Bad Request Error',
   description: '요청 파라미터에 이상이 있습니다.',
   status: 400 // 나쁜 request가 왔다라는 의미
 }
-
 Object.freeze(BAD_REQUEST_ERROR);
+
+/**
+ * 시스템 에러 응답 코드 설정 (우리의 서버의 문제면 무조건 500)
+ * @type {ResponseCodeConfig}
+ */
+const DB_ERROR = {
+  code: 'E80',
+  info: 'DB Error',
+  description: '서비스 제공 상태가 원활하지 않습니다.',
+  status: 500
+}
+Object.freeze(DB_ERROR);
+
+/**
+ * 시스템 에러 응답 코드 설정 (예기치 못한 상황 - 500)
+ * @type {ResponseCodeConfig}
+ */
+const SYSTEM_ERROR = {
+  code: 'E99',
+  info: 'Application Error',
+  description: '서비스 제공 상태가 원활하지 않습니다.',
+  status: 500
+}
+Object.freeze(SYSTEM_ERROR);
 
 export {
   SUCCESS,
   NOT_REGISTERED_ERROR,
-  BAD_REQUEST_ERROR
+  BAD_REQUEST_ERROR,
+  SYSTEM_ERROR,
+  DB_ERROR
 }
