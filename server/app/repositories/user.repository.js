@@ -18,7 +18,7 @@ async function findByEmail(t = null, email) {
       }
     },
     {
-      transaction: t
+      transaction: t // transaction
     }
   );
 }

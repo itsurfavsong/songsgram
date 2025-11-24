@@ -13,7 +13,6 @@ import Notification from './Notification.js';
 import Post from './Post.js';
 import PushSubscription from './PushSubscription.js';
 
-
 const db = {}; // 생성할 db 인스턴스 저장용
 
 // Sequelize 인스턴스 생성

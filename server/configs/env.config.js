@@ -16,6 +16,7 @@ const envFiles = [
   '.env.test',
   '.env'
 ];
+
 let filePath = ''; // constance variable issue 가 생길 수 있어서 꼭 let으로 하기.
 
 // 정확하게 하려면 절대경로를 써주는데 지금은 그냥 넘어간다.
