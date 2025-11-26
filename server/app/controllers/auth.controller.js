@@ -7,6 +7,7 @@
 import { SUCCESS } from "../../configs/responseCode.config.js";
 import authService from "../services/auth.service.js";
 import { createBaseResponse } from "../utils/createBaseResponse.util.js";
+import cookieUtil from "../utils/cookie/cookie.util.js";
 
 // --------------------------------------------------------------------------------------
 // public--------------------------------------------------------------------------------
@@ -24,13 +25,17 @@ async function login(req, res, next) {
 
   // todo: logger.debug() 지우기
   try {
-    logger.debug('------------------로그인 컨트롤러 시작--------------------')
+    // logger.debug('------------------로그인 컨트롤러 시작--------------------')
     const body = req.body; // 파라미터 획득
-    logger.debug(body.email);
+
     // 로그인 서비스 호출
-    const result = await authService.login(body);
-    logger.debug('------------------로그인 컨트롤러 끝--------------------')
-    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
+    const { accessToken, resfreshToken, user } = await authService.login(body);
+
+    // Cookie에 RefreshToken 설정
+    cookieUtil.setCookieRefreshToken(res, resfreshToken);
+
+    // logger.debug('------------------로그인 컨트롤러 끝--------------------')
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, {accessToken, user}));
   }
   catch(error) {
     next(error);
@@ -40,7 +45,7 @@ async function login(req, res, next) {
 // --------------------------------------------------------------------------------------
 // export--------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
-export const authController = {
+export default {
   login,
 };
 // -> 지금 객체로 내보낸거다. 그래서 이 객체가 import된 곳에서 꼭 함수 login을 명시해줘야지 함수 login을 사용할 수 있다.

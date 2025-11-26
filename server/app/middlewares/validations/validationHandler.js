@@ -18,7 +18,8 @@ export default function validationHandler(req, res, next){
 
     // 에러 응답
     // return res.status(BAD_REQUEST_ERROR.status).send(createBaseResponse(BAD_REQUEST_ERROR, customErrors.array()));
-    return res.status(BAD_REQUEST_ERROR.status).send(createBaseResponse(BAD_REQUEST_ERROR, errors.array()));
+    return res.status(BAD_REQUEST_ERROR.status)
+              .send(createBaseResponse(BAD_REQUEST_ERROR, errors.array()));
   }
 
   next();

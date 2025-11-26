@@ -4,7 +4,7 @@
  */
 
 import express from 'express';
-import { authController } from '../app/controllers/auth.controller.js';
+import authController from '../app/controllers/auth.controller.js';
 import validationHandler from '../app/middlewares/validations/validationHandler.js';
 import loginValidator from '../app/middlewares/validations/validators/auth/login.validator.js';
 

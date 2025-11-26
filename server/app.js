@@ -10,7 +10,6 @@ import authRouter from './routes/auth.router.js';
 import errorHandler from './app/errors/errorHandler.js';
 
 const app = express();
-
 app.use(express.json()); // JSON 요청 파싱 처리
 
 // -----------------------------------------------------------

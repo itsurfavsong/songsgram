@@ -43,6 +43,6 @@ export const logger = winston.createLogger(
   }
 );
 
-// logger.debug('요요요요'); // 디버그 관련
-// logger.error('야야야야'); // 에러 관련
+logger.debug('요요요요'); // 디버그 관련
+logger.error('야야야야'); // 에러 관련
 
