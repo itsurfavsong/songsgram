@@ -3,9 +3,9 @@ A new social media app for myself
 
 # project structure
 <pre>
-songsgram/ 
-├── client/             # Vite + React (PWA) 
-│   ├── src/                # React 실행 관련 로직 
+songsgram/
+├── client/             # Vite + React (PWA)
+│   ├── src/                # React 실행 관련 로직
 │   │   ├── assets/             # 비공개 정적 파일
 │   │   ├── config/             # 설정 파일 (환경 변수, API 엔드포인트, Firebase/Web Push 설정 등)
 │   │   ├── components/         # 컴포넌트
@@ -38,3 +38,14 @@ songsgram/
 │   └── .env                # 환경 변수 설정 파일
 └── READEME.md
 </pre>
+
+# 관습적인 CRUD 메소드명
+
+컨트롤러의 메소드명 리스트업 (CRUD기반)
+index: 단순 데이터 조회 처리 (리스트 페이지 출력 or 리스트 데이터 획득할 때)
+show: 상세 데이터 조회 처리 (상세 페이지 or 상세 데이터 획득)
+create: 작성 페이지 출력 (우리는 API라서 필요없음)
+store: 새로운 데이터 작성 처리
+edit: 수정 페이지 출력 (우리는 API라서 필요없음)
+update: 데이터 수정 처리
+destroy: 데이터 삭제

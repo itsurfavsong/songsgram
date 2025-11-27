@@ -7,6 +7,7 @@
 import express from 'express';
 import './configs/env.config.js';
 import authRouter from './routes/auth.router.js';
+import filesRouter from './routes/files.router.js';
 import errorHandler from './app/errors/errorHandler.js';
 import SwaggerParser from 'swagger-parser';
 import path from 'path';
@@ -14,6 +15,12 @@ import swaggerUi from 'swagger-ui-express';
 
 const app = express();
 app.use(express.json()); // JSON 요청 파싱 처리
+
+// -----------------------------------------------------------
+// 정적 파일 제공 등록
+// -----------------------------------------------------------
+app.use(process.env.ACCESS_FILE_POST_IMAGE_PATH, express.static(process.env.FILE_POST_IMAGE_PATH));
+app.use(process.env.ACCESS_FILE_USER_PROFILE_PATH, express.static(process.env.FILE_USER_PROFILE_PATH));
 
 // -----------------------------------------------------------
 // Swagger 등록
@@ -26,6 +33,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc)); // api는 �
 // 라우터 정의
 // -----------------------------------------------------------
 app.use('/api/auth', authRouter);
+app.use('/api/files', filesRouter);
 
 // 에러 핸들러
 app.use(errorHandler);

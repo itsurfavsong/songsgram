@@ -48,9 +48,3 @@ async function login(req, res, next) {
 export default {
   login,
 };
-// -> 지금 객체로 내보낸거다. 그래서 이 객체가 import된 곳에서 꼭 함수 login을 명시해줘야지 함수 login을 사용할 수 있다.
-
-// 혹은 이렇게 써도 괜찮다.
-// export default {
-//   login,
-// };
