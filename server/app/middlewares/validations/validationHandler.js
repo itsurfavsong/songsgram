@@ -17,9 +17,9 @@ export default function validationHandler(req, res, next){
     const customErrors =errors.formatWith(error => `${error.path}: ${error.msg}`);
 
     // 에러 응답
-    // return res.status(BAD_REQUEST_ERROR.status).send(createBaseResponse(BAD_REQUEST_ERROR, customErrors.array()));
+    // return res.status(BAD_REQUEST_ERROR.status).send(createBaseResponse(BAD_REQUEST_ERROR, errors.array()));
     return res.status(BAD_REQUEST_ERROR.status)
-              .send(createBaseResponse(BAD_REQUEST_ERROR, errors.array()));
+              .send(createBaseResponse(BAD_REQUEST_ERROR, customErrors.array()));
   }
 
   next();

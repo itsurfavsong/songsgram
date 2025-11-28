@@ -10,7 +10,6 @@ import db from '../models/index.js';
 const { User } = db;
 
 /**
- *
  * @param {import("sequelize").Transaction} t
  * @param {string} email
  * @returns
@@ -21,11 +20,9 @@ async function findByEmail(t = null, email) {
     {
       where: {
         email: email
-      }
-    },
-    {
+      },
       transaction: t // transaction
-    }
+    },
   );
 }
 

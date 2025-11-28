@@ -1,6 +1,6 @@
 /**
  * @file routes/files.router.js
- * @description 파일관련 라우터 the router of files
+ * @description 파일 관련 라우터 the router of files
  * 251127 v1.0.0 BSong1 init
  */
 

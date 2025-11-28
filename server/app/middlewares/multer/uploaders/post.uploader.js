@@ -43,7 +43,7 @@ export default function(req, res, next) {  // 함수 모음집(closure)
           const uniqueFileName = `${dayjs().format('YYYYMMDD')}_${crypto.randomUUID()}`; // 시간을 제목에 넣어주는게 포인트.
           // 저장할 파일 PATH 생성
           const fileNameParts = file.originalname.split('.'); // 유저가 보내온 이름+확장자 = originalname
-          const ext = fileNameParts[fileNameParts.length - 1].toLowerCase(); // 파일 이름을 . 기준으로 분리한 후 마지막 요소(확장자)를 가져온다.그리고 확장자를 소문자로 변환하여 일관되게 관리하기 위함이다.
+          const ext = fileNameParts[fileNameParts.length - 1].toLowerCase(); // 파일명을 '.'로 분리해 마지막 요소인 확장자를 가져오고, 소문자로 통일해 관리한다.
 
           callback(null, `${uniqueFileName}.${ext}`); // next와 비슷한 처리를 진행한다.
         }
@@ -70,3 +70,11 @@ export default function(req, res, next) {  // 함수 모음집(closure)
     next();
   });
 }
+
+/**
+ * ➡ next()는 "업로드가 끝난 뒤에" 호출되어야 하기 때문이야.
+그리고 업로드가 끝나는 시점은 upload() 콜백 안에서만 알 수 있어.
+즉, 바깥에서는 업로드가 언제 끝나는지 알 수 없음
+업로드의 성공/실패는 오직 upload의 콜백에서만 감지 가능
+그래서 next()는 그 콜백 안에서만 호출할 수 있음
+ */
