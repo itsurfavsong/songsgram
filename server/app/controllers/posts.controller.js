@@ -4,9 +4,9 @@
  * 251128 v1.0.0 BSong1 init
  */
 
-import { SUCCESS } from "../../configs/responseCode.config.js";
-import postsService from "../services/posts.service.js";
-import { createBaseResponse } from "../utils/createBaseResponse.util.js";
+import { SUCCESS } from '../../configs/responseCode.config.js';
+import postsService from '../services/posts.service.js';
+import { createBaseResponse } from '../utils/createBaseResponse.util.js';
 
 // --------------------------------------------------------------------------------------
 // public--------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ async function index(req, res, next) {
     const page = req.body.page || 1;
     const result = await postsService.pagination(page);
 
-    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result))
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
   } catch (error) {
     return next(error);
   }
@@ -42,7 +42,7 @@ async function show(req, res, next) {
     const result = await postsService.show(req.params.id);
     return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
   } catch (error) {
-    return next(error)
+    return next(error);
   }
 }
 
@@ -55,10 +55,13 @@ async function show(req, res, next) {
  */
 async function store(req, res, next) {
   try {
-    const result = await postsService.store(content);
+    const { content, image } = req.body;
+
+    const post = await postsService.store({ content, image });
+
     return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
   } catch (error) {
-    return next(error)
+    return next(error);
   }
 }
 
@@ -71,10 +74,13 @@ async function store(req, res, next) {
  */
 async function destroy(req, res, next) {
   try {
-    const result = await postsService.destroy(req.params.id);
+    const postId = req.params.id; // 이미 validator에서 숫자로 검증 & toInt
+    const result = await postsService.destroy(postId);
+
     return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
+    // => { code: '00', info: 'NORMAL_CODE', description: '정상 처리', data: result }
   } catch (error) {
-    return next(error)
+    return next(error);
   }
 }
 
@@ -82,5 +88,5 @@ export default {
   index,
   show,
   store,
-  destroy
-}
+  destroy,
+};

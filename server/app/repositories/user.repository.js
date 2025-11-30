@@ -12,33 +12,31 @@ const { User } = db;
 /**
  * @param {import("sequelize").Transaction} t
  * @param {string} email
- * @returns
+ * @returns {Promise<import("../models/User.js").User>}}
  */
 async function findByEmail(t = null, email) {
   // SELECT * FROM users WHERE users.email = ? AND deleted_at IS NULL
-  return await User.findOne(
-    {
-      where: {
-        email: email
-      },
-      transaction: t // transaction
+  return await User.findOne({
+    where: {
+      email: email,
     },
-  );
+    transaction: t, // transaction
+  });
 }
 
 /**
  * 유저 모델 인스턴트로 save 처리
  * @param {import("sequelize").Transaction} t
  * @param {import("../models/index.js").User} user
- * @returns
+ * @returns {Promise<import("../models/User.js").User>}
  */
 async function save(t = null, user) {
   return await user.save({ transaction: t });
-};
+}
 
 export default {
   findByEmail,
-  save
+  save,
 };
 
 // 2. 일반형
@@ -47,4 +45,3 @@ export default {
 // async function findByEmail(t = null, email) {
 //   return await db.User
 // }
-

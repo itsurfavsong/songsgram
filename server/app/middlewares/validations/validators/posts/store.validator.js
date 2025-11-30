@@ -4,6 +4,6 @@
  * 251128 v1.0.0 BSong1 init
  */
 
-import { content } from "../../fields/post.field.js";
+import { content, image } from '../../fields/post.field.js';
 
-export default [content];
+export default [content, image];
