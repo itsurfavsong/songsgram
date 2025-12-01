@@ -8,7 +8,7 @@ import myError from '../../../errors/customs/my.error.js';
 import { BAD_FILE_ERROR } from '../../../../configs/responseCode.config.js';
 import fs from 'fs';
 import dayjs from 'dayjs';
-import path from 'path';
+import pathUtil from '../../../utils/path/path.util.js'
 
 /**
  * 게시글 이미지 업로더 처리 미들웨어
@@ -16,25 +16,29 @@ import path from 'path';
  * @param {import("express").Respose} res
  * @param {import("express").NextFunction} next
  */
-export default function (req, res, next) {
-  // 함수 모음집(closure)
+export default function (req, res, next) { // 함수 모음집(closure)
   // multer 객체 정의
   const upload = multer({
     // storage: 파일을 저장할 위치를 상세하게 제어하는 프로퍼티
-    storage: multer.diskStorage({
+    storage: multer.diskStorage(
+      {
       // 파일 저장 경로 설정
       destination(req, file, callback) {
+        const fullPath = pathUtil.getPostsImagePath();
         // multer 자체적인 callback
         // 저장 디렉토리 설정
-        if (!fs.existsSync(process.env.FILE_POST_IMAGE_PATH)) {
+        if(!fs.existsSync(fullPath)) {
           // 해당 디렉토리가 없으면 생성하는 처리를 진행한다.
-          fs.mkdirSync(process.env.FILE_POST_IMAGE_PATH, {
-            recursive: true, // 중간 디렉토리까지 모두 생성
-            mode: 0o755, // 디렉토리 권한 설정 rwxr(생성자 권한)-xr(그룹 유저 권한)-x(기타 유저 권한)
-          });
+          fs.mkdirSync(
+            fullPath,
+            {
+              recursive: true, // 중간 디렉토리까지 모두 생성
+              mode: 0o755 // 권한 설정 rwxr-xr-x
+            }
+          );
         }
 
-        callback(null, process.env.FILE_POST_IMAGE_PATH); // 에러 혹은 null 들어왔을 때 multer의 처리 방식이 다르다. 에러는 에러 처리, null은 그냥 넘어가는...
+        callback(null, fullPath); // 에러 혹은 null 들어왔을 때 multer의 처리 방식이 다르다. 에러는 에러 처리, null은 그냥 넘어가는...
       },
       // 파일명 설정
       filename(req, file, callback) {
@@ -65,12 +69,6 @@ export default function (req, res, next) {
   upload(req, res, (err) => {
     if (err instanceof multer.MulterError || err) {
       return next(myError(err.message, BAD_FILE_ERROR));
-    }
-    // ★ 여기서 imageUrl 추가
-    if (req.file) {
-      const baseUrl = `${process.env.APP_URL}`; // 예: http://localhost:4000
-      const filePath = `${process.env.FILE_POST_IMAGE_PATH_URL}`; // 예: /uploads/posts/
-      req.body.imageUrl = `${baseUrl}${filePath}${req.file.filename}`; // 예: http://localhost:4000/uploads/posts/20231127_xxx.png
     }
     next();
   });

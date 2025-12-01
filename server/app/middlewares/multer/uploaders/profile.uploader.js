@@ -8,6 +8,7 @@ import myError from '../../../errors/customs/my.error.js'
 import { BAD_FILE_ERROR } from '../../../../configs/responseCode.config.js';
 import fs from 'fs';
 import dayjs from 'dayjs';
+import pathUtil from '../../../utils/path/path.util.js'
 
 /**
  * 프로필 이미지 업로더 처리 미들웨어
@@ -24,18 +25,18 @@ export default function(req, res, next) {  // 함수 모음집(closure)
         // 파일 저장 경로 설정
         destination(req, file, callback) { // multer 자체적인 callback
           // 저장 디렉토리 설정
-          if(!fs.existsSync(process.env.FILE_USER_PROFILE_PATH)) {
+          const fullPath = pathUtil.getProfilesImagePath();
             // 해당 디렉토리가 없으면 생성하는 처리를 진행한다.
             fs.mkdirSync(
-              process.env.FILE_USER_PROFILE_PATH,
+              fullPath,
               {
                 recursive: true, // 중간 디렉토리까지 모두 생성
                 mode: 0o755, // 디렉토리 권한 설정 rwxr(생성자 권한)-xr(그룹 유저 권한)-x(기타 유저 권한)
               }
             );
-          }
 
-          callback(null, process.env.FILE_USER_PROFILE_PATH); // 에러 혹은 null 들어왔을 때 multer의 처리 방식이 다르다. 에러는 에러 처리, null은 그냥 넘어가는...
+
+          callback(null, fullPath); // 에러 혹은 null 들어왔을 때 multer의 처리 방식이 다르다. 에러는 에러 처리, null은 그냥 넘어가는...
         },
         // 파일명 설정
         filename(req, file, callback) {

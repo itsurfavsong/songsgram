@@ -7,10 +7,15 @@
 import bcrypt from 'bcrypt';
 import userRepository from "../repositories/user.repository.js";
 import myError from '../errors/customs/my.error.js';
-import { NOT_REGISTERED_ERROR } from '../../configs/responseCode.config.js';
+import { NOT_REGISTERED_ERROR, REISSUE_ERROR } from '../../configs/responseCode.config.js';
 import jwtUtil from '../utils/jwt/jwt.util.js';
 import db from '../models/index.js';
 
+/**
+ * 로그인
+ * @param {{emali: string, password: string}}} body
+ * @returns {Promise<import("../models/User.js").User>}
+ */
 async function login(body) {
   // 트랜잭션 처리
   // async function login(body) {
@@ -58,6 +63,37 @@ async function login(body) {
   }); // transaction - 이슈가 생기면 롤백해주는 기능
 }
 
+async function reissue(token) {
+  // 토큰 검증 및 유저id 획득
+  const claims = jwtUtil.getClaimsWithVerifyToken(token);
+  const userId = claims.sub; // generateAccessToken의 sub이다. 형변환 필요 없음. 숫자를 넣으면 숫자로 나온다.
+
+  return await db.sequelize.transaction(async t => {
+    // 유저 정보 획득
+    const user = await userRepository.findByPk(t, userId);
+
+    // 토큰 일치 검증, token과 userId가 같은 지...
+    if(token !== user.refreshToken) {
+      throw myError('리프레시 토큰 불일치', REISSUE_ERROR);
+    }
+
+    // JWT 생성
+    const accessToken = jwtUtil.generateAccessToken(user);
+    const refreshToken = jwtUtil.generateRefreshToken(user);
+
+    // 리프레쉬 토큰 DB에 저장 처리
+    user.refreshToken = refreshToken;
+    await userRepository.save(t, user);
+
+    return {
+      accessToken,
+      refreshToken,
+      user
+    }
+  });
+}
+
 export default {
   login,
+  reissue
 };

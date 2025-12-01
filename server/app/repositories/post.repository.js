@@ -22,7 +22,7 @@ async function pagination(t = null, data) {
 }
 
 // 게시물 상세 조회
-async function findByPk(t = null, id) {
+async function findByPkWithComments(t = null, id) {
   return await Post.findByPk(id, {
     include: [
       {
@@ -38,38 +38,43 @@ async function findByPk(t = null, id) {
   });
 }
 
-// 게시물 작성
-async function create(content, image) {
-  return await Post.create({ content, image });
+/**
+ * 게시글 ID로 조회(최상위 댓글 포함)
+ * @param {import("sequelize").Transaction|null} t
+ * @param {import("../services/posts.service.type.js").Id} id
+ * @returns {Promise<import("../models/Post.js").Post>}
+ */
+async function findByPk(t = null, id) {
+  return await Post.findByPk(
+    id,
+    {
+      transaction: t
+    }
+  );
+}
+
+/**
+ * 게시글 작성
+ * @param {import("sequelize").Transaction|null} t
+ * @param {import("../services/posts.service.type.js").PostStoreData} data
+ * @returns {Promise<import("../models/Post.js").Post>}
+ */
+async function create(t = null, data) {
+  return await Post.create(data);
 }
 
 // 게시물 삭제
-async function destroyByPk(id, t = null) {
+async function destroy(t = null, id) {
   return await Post.destroy({
     where: { id: id },
     transaction: t,
   });
 }
 
-// // async function findByPk(t = null, id) {
-//   return await Post.findByPk(id, {
-//     include: [
-//       {
-//         model: Comment,
-//         as: 'post-has-comts',
-//         where: {
-//           replyId: 0,
-//         },
-//         required: false, // Left Join 설정 & 댓글이 없는 posts도 있어서...그러면 left join 해야된다.
-//       },
-//     ],
-//     transaction: t,
-//   });
-// }
-
 export default {
   pagination,
-  findByPk,
+  findByPkWithComments,
   create,
-  destroyByPk,
+  destroy,
+  findByPk
 };

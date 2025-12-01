@@ -42,7 +42,10 @@ function authorize(req) {
     //   req.baseUrl,    // 프리픽스로 묶음 Path ex) /api/auth
     //   req.path        // `baseUrl`을 제외한 Path ex) /login
     // );
-    return item.path.test(`${req.baseUrl}${req.path}`); // true or false가 됨. true가 되면 true 배열을 반환한다.
+
+  // express는 경우에 따라 가장 마지막에 `/`를 붙이는 경우도 있어서, 그럴 경우 가장 마지막 `/`제거
+  const path = req.path.endsWith('/') ? req.path.slice(0, -1) : req.path; // 마지막 / 를 제거하는 코드를 추가.
+    return item.path.test(`${req.baseUrl}${path}`);
   });
 
 // function authorize(req) {
