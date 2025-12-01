@@ -51,7 +51,7 @@ function getCookie(req, cookieName) {
 // -----------------------------------------------------------------------
 
 /**
- *
+ * 쿠키에 리프래시 토큰 설정
  * @param {import("express").Response} res
  * @param {string} refreshToken
  */
@@ -72,12 +72,10 @@ function setCookieRefreshToken(res, refreshToken) { // 맵핑을 해서 책임�
  * @returns {string}
  */
 function getCookieRefreshToken(req) {
-  return getCookie(req, JWT_REFRESH_TOKEN_COOKIE_NAME);
+  return getCookie(req, process.env.JWT_REFRESH_TOKEN_COOKIE_NAME);
 }
 
 export default {
   setCookieRefreshToken,
   getCookieRefreshToken,
-  setCookie,
-  getCookie
 }

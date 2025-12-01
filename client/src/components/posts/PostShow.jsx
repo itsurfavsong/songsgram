@@ -3,7 +3,7 @@ import PostComment from './comments/PostComment.jsx';
 import './PostShow.css';
 import PostDelete from './PostDelete.jsx';
 
-export default function PostsShow() {
+export default function PostShow() {
   const content = '초콜렛이.. 없어...?\n손나 바카나!!';
   const [openDeleteFlg, setOpenDeleteFlg] = useState(false);
 
@@ -18,7 +18,7 @@ export default function PostsShow() {
     <>
       <div className="post-show-container">
         <div className="post-show-post-box bottom-line">
-          <img className="post-show-post-img" src={`/dev/choco.jpg`}></img>
+          <img className="post-show-post-img" src={`http://localhost:5173/dev/choco.jpg`}></img>
           <div className="post-show-post-info-items">
             <div className="icon-delete" onClick={openDeleteModal} ></div>
             <div className="post-show-post-likes-items">

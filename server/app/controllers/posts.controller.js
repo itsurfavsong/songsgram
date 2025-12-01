@@ -21,10 +21,18 @@ import { createBaseResponse } from '../utils/createBaseResponse.util.js';
  */
 async function index(req, res, next) {
   try {
-    const page = req.body.page || 1;
-    const result = await postsService.pagination(page);
+    const page = req.query?.page ? parseInt(req.query.page) : 1; //toInt가 쿼리쪽에서 작동X
 
-    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
+    const { count, rows } = await postsService.pagination(page);
+
+    const responseData = {
+      page: page,
+      limit: 6,
+      count: count,
+      posts: rows,
+    };
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, responseData));
   } catch (error) {
     return next(error);
   }
@@ -40,6 +48,7 @@ async function index(req, res, next) {
 async function show(req, res, next) {
   try {
     const result = await postsService.show(req.params.id);
+
     return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
   } catch (error) {
     return next(error);

@@ -41,7 +41,7 @@ async function login(req, res, next) {
   catch(error) {
     next(error);
   }
-};
+}
 
 /**
  * 토큰 재 발급 컨트롤러 처리
@@ -51,9 +51,10 @@ async function login(req, res, next) {
  * @returns
  */
 async function reissue(req, res, next) {
-  console.log(req.cookies);
   try {
     const token = cookieUtil.getCookieRefreshToken(req);
+
+    console.log(token, '토큰토큰');
 
     // 토큰 존재 여부 확인
     if(!token) {
@@ -68,14 +69,14 @@ async function reissue(req, res, next) {
 
     return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, { accessToken, user }))
   } catch (error) {
-
+    next(error);
   }
 }
 
 // --------------------------------------------------------------------------------------
 // export--------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
-export default {
+export const authController = {
   login,
   reissue
 };

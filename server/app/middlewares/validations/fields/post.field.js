@@ -4,11 +4,13 @@
  * 251128 v1.0.0 BSong1 init
 */
 
-import { body, param } from "express-validator";
+import { body, param, query } from "express-validator";
 import pathUtil from "../../../utils/path/path.util.js";
+import path from "path";
+import fs from 'fs';
 
 // 페이지 필드
-export const page = body('page')
+export const page = query('page')
   .trim()
   .optional()
   .isNumeric()
@@ -25,30 +27,30 @@ export const id = param('id')
   .withMessage('숫자만 허용합니다.')
   .toInt();
 
-// 컨텐츠 필드
-export const content = body('content') // Json
+// 게시글 내용
+export const content = body('content')
   .trim()
   .notEmpty()
-  .withMessage('컨텐츠는 필수 항목입니다.')
+  .withMessage('내용은 필수 항목입니다.');
 
-// 이미지 URL 필드
+// 게시글 이미지
 export const image = body('image')
   .trim()
   .notEmpty()
   .withMessage('이미지는 필수 항목입니다.')
   .bail()
   .custom(val => {
-    // 우리 앱의 파일에 접근하는 도메인 + path가 맞는지 확인. (도메인 관련 검증)
+    // 우리 앱의 게시글 이미지에 접근하는 `도메인 + path`가 맞는지 확인
     if(!val.startsWith(`${process.env.APP_URL}${process.env.ACCESS_FILE_POST_IMAGE_PATH}`)) {
       return false;
     }
 
-    return true; // true 던지 false 던지 boolean으로 반환해야함.
+    return true;
   })
   .withMessage('허용하지 않는 이미지 경로입니다.')
   .bail()
   .custom(val => {
-    // 실제 이미지 파일이 있는지 검증 처리 (이미지 파일 유무에 관련 검증)
+    // 실제 이미지 파일이 있는지 검증 처리
     const splitPath = val.split('/');
     const fullPath = path.join(pathUtil.getPostsImagePath(), splitPath[splitPath.length - 1]);
 

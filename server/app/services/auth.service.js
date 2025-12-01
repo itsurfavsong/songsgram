@@ -58,11 +58,15 @@ async function login(body) {
       user,
       accessToken,
       refreshToken
-    };
+    }
 
   }); // transaction - 이슈가 생기면 롤백해주는 기능
 }
 
+/**
+ * 토큰 재발급 처리
+ * @param {string} token
+ */
 async function reissue(token) {
   // 토큰 검증 및 유저id 획득
   const claims = jwtUtil.getClaimsWithVerifyToken(token);

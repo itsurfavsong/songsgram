@@ -92,7 +92,7 @@ function getBearerToken(req) {
 function getClaimsWithVerifyToken(token) {
   try {
     return jwt.verify(token, process.env.JWT_SECRET);
-  } catch (error) {
+  } catch(error) {
     if(error instanceof jwt.TokenExpiredError) {
       throw myError('토큰 만료', EXPIRED_TOKEN_ERROR);
     } else if(error instanceof jwt.JsonWebTokenError) {
