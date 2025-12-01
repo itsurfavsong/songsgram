@@ -24,11 +24,11 @@ async function pagination(page) {
 
 /**
  * 게시글 상세
- * @param {import("./posts.service.type.js").Id} id
+ * @param {import("./posts.service.type.js").Id} id 
  * @returns {Promise<import("../models/Post.js").Post>}
  */
 async function show(id) {
-  return await postRepository.findByPk(null, id);
+  return await postRepository.findByPkWithComments(null, id);
 }
 
 /**
@@ -36,8 +36,13 @@ async function show(id) {
  * @param {import("./posts.service.type.js").PostStoreData} { data }
  * @returns {Promise<import("../models/Post.js").Post>}
  */
+// async function create(data) {
+//   return await postRepository.create(null, data); // 1개 밖에 없는 상황에서는 sequlize에서 알아서 해줌.
+// }
 async function create(data) {
-  return await postRepository.create(null, data); // 1개 밖에 없는 상황에서는 sequlize에서 알아서 해줌.
+  return await db.sequelize.transaction(async t => {
+    return await postRepository.create(t, data);
+  });
 }
 
 /**
@@ -47,7 +52,7 @@ async function create(data) {
  */
 async function destroy({ userId, postId }) { // 영향받은 레코드 수를 반환함.
   // 트랜잭션 시작
-  return db.sequelize.transaction(async t => {
+  return await db.sequelize.transaction(async t => {
     // (게시글 작성자 일치 확인용)
     const post = await postRepository.findByPk(t, postId);
 
