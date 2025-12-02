@@ -30,10 +30,10 @@ async function login(req, res, next) {
     const body = req.body; // 파라미터 획득
 
     // 로그인 서비스 호출
-    const { accessToken, resfreshToken, user } = await authService.login(body);
+    const { accessToken, refreshToken, user } = await authService.login(body);
 
     // Cookie에 RefreshToken 설정
-    cookieUtil.setCookieRefreshToken(res, resfreshToken);
+    cookieUtil.setCookieRefreshToken(res, refreshToken);
 
     // logger.debug('------------------로그인 컨트롤러 끝--------------------')
     return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, {accessToken, user}));
@@ -54,18 +54,16 @@ async function reissue(req, res, next) {
   try {
     const token = cookieUtil.getCookieRefreshToken(req);
 
-    console.log(token, '토큰토큰');
-
     // 토큰 존재 여부 확인
     if(!token) {
       throw myError('no refresh token', REISSUE_ERROR);
     }
 
     // 토큰 재발급 처리
-    const { accessToken, resfreshToken, user } = await authService.reissue(token);
+    const { accessToken, refreshToken, user } = await authService.reissue(token);
 
     // 쿠키에 리프레시 토큰 설정
-    cookieUtil.setCookieRefreshToken(res, resfreshToken);
+    cookieUtil.setCookieRefreshToken(res, refreshToken);
 
     return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, { accessToken, user }))
   } catch (error) {

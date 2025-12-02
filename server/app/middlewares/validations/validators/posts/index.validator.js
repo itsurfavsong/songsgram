@@ -4,6 +4,6 @@
  * 251128 v1.0.0 BSong1 init
  */
 
-import { id } from "../../fields/post.field.js";
+import { page } from "../../fields/post.field.js";
 
-export default [id];
+export default [page];

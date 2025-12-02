@@ -41,7 +41,7 @@ async function save(t = null, user) {
  * @returns {Promise<import("../models/User.js").User>}
  */
 async function findByPk(t = null, id) {
-  return await id.findByPk(id, { transaction: t });
+  return await User.findByPk(id, { transaction: t });
 }
 
 export default {
