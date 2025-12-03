@@ -4,7 +4,7 @@
  * 251120 v1.0.0 BSong1 init
  */
 import dayjs from 'dayjs';
-import { DataTypes, Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
 const modelName = 'Post'; // 모델명(JS 프로그래밍단 내부에서 사용)
 
@@ -87,9 +87,9 @@ const Post = {  // sequelize 인스턴스 초기화 함수와 associate 함수�
     return definePost;
   },
    associate: (db) => {
-    db.Post.hasMany(db.Like, {sourceKey: 'id', foreignKey: 'postId', as: 'post-has-likes' }); // sourceKey는 User에서 가져온 거고 foreinKey는 Post테이블에서 가져온 것.
-    db.Post.hasMany(db.Comment, {sourceKey: 'id', foreignKey: 'postId', as: 'post-has-comts' }); // sourceKey는 User에서 가져온 거고 foreinKey는 Post테이블에서 가져온 것.
-    db.Post.belongsTo(db.User, { targetKey: 'id', foreignKey: 'userId', as: 'posts-belong-to-u' });
+    db.Post.hasMany(db.Like, {sourceKey: 'id', foreignKey: 'postId', as: 'postHasLikes' }); // sourceKey는 User에서 가져온 거고 foreinKey는 Post테이블에서 가져온 것.
+    db.Post.hasMany(db.Comment, {sourceKey: 'id', foreignKey: 'postId', as: 'postHasComts' }); // sourceKey는 User에서 가져온 거고 foreinKey는 Post테이블에서 가져온 것.
+    db.Post.belongsTo(db.User, { targetKey: 'id', foreignKey: 'userId', as: 'postsBelongToUser' });
   }
 }
 

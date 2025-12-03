@@ -4,7 +4,7 @@
  * 251120 v1.0.0 BSong1 init
  */
 import dayjs from 'dayjs';
-import { DataTypes, Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
 const modelName = 'Like'; // 모델명(JS 프로그래밍단 내부에서 사용)
 
@@ -80,8 +80,8 @@ const Like = {  // sequelize 인스턴스 초기화 함수와 associate 함수�
     return defineLike;
   },
   associate: (db) => {
-  db.Like.belongsTo(db.User, { targetKey: 'id', foreignKey: 'userId', as: 'likes-belong-to-u' });
-  db.Like.belongsTo(db.Post, { targetKey: 'id', foreignKey: 'postId', as: 'likes-belong-to-post' });
+  db.Like.belongsTo(db.User, { targetKey: 'id', foreignKey: 'userId', as: 'likesBelongToUser' });
+  db.Like.belongsTo(db.Post, { targetKey: 'id', foreignKey: 'postId', as: 'likesBelongToPost' });
   }
 }
 

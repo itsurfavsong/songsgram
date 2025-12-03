@@ -38,7 +38,7 @@ axiosInstance.interceptors.request.use(async (config) => { // 이걸 하는 이�
         const response = await store.dispatch(reissueThunk()).unwrap();
         accessToken = response.data.accessToken;
       }
-      config.headers["Authrization"] = `Bearer ${accessToken}`;
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
     return config;
   } catch (error) {

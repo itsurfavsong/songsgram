@@ -4,7 +4,7 @@
  * 251120 v1.0.0 BSong1 init
  */
 import dayjs from 'dayjs';
-import { DataTypes, Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
 const modelName = 'Notification'; // 모델명(JS 프로그래밍단 내부에서 사용)
 
@@ -93,7 +93,7 @@ const Notification = {  // sequelize 인스턴스 초기화 함수와 associate 
     return defineNotification;
   },
   associate: (db) => {
-  db.Notification.belongsTo(db.User, { targetKey: 'id', foreignKey: 'userId', as: 'ntfs-belong-to-u' });
+  db.Notification.belongsTo(db.User, { targetKey: 'id', foreignKey: 'userId', as: 'ntfsBelongToUser' });
   }
 }
 

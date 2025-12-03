@@ -4,7 +4,7 @@
  * 251120 v1.0.0 BSong1 init
  */
 import dayjs from 'dayjs';
-import { DataTypes, Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
 const modelName = 'PushSubscription'; // 모델명(JS 프로그래밍단 내부에서 사용)
 
@@ -81,7 +81,7 @@ const PushSubscription = {  // sequelize 인스턴스 초기화 함수와 associ
     return definePushSubscription;
   },
   associate: (db) => {
-  db.PushSubscription.belongsTo(db.User, { targetKey: 'id', foreignKey: 'userId', as: 'p-subs-belong-to-u' });
+  db.PushSubscription.belongsTo(db.User, { targetKey: 'id', foreignKey: 'userId', as: 'psubsBelongToUser' });
   }
 }
 

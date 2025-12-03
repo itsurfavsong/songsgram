@@ -4,9 +4,8 @@
  * 251128 v1.0.0 BSong1 init
  */
 
-import { where } from 'sequelize';
 import db from '../models/index.js';
-const { Post, sequelize, Comment } = db;
+const { Post, User, Comment } = db;
 
 /**
  * 게시글 페이지네이션
@@ -55,14 +54,35 @@ async function findByPkWithComments(t = null, id) {
     include: [
       {
         model: Comment,
-        as: 'post-has-comts',
+        as: 'postHasComts',
         where: {
           replyId: 0,
         },
         required: false, // Left Join 설정 & 댓글이 없는 posts도 있어서...그러면 left join 해야된다.
-      },
-    ],
-    transaction: t,
+        include: [
+            {
+              attributes: ['nick', 'profile'],
+              model: User,
+              as: 'comtsBelongToUser',
+              required: true, // Inner Join 설정
+            },
+            {
+              model: Comment,
+              as: 'comtHasComts',
+              required: false, // Left Join 설정
+              include: [
+                {
+                  attributes: ['nick', 'profile'],
+                  model: User,
+                  as: 'comtsBelongToUser',
+                  required: true, // Inner Join 설정
+      }
+              ],
+            }
+          ],
+        }
+      ],
+      transaction: t
     }
   );
 }
