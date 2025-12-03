@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import postIndexReducer from './slices/postIndexSlice.js'
-import authReducer from './slices/authSlice.js'
+import postIndexReducer from './slices/postIndexSlice.js';
+import authReducer from './slices/authSlice.js';
+import postShowReducer from './slices/postShowSlice.js'
 
-export default configureStore ({
+export default configureStore({
   reducer: {
+    auth: authReducer,
     postIndex: postIndexReducer,
-    auth: authReducer
+    postShow: postShowReducer,
   }
 });

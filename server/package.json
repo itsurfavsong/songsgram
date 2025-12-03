@@ -16,7 +16,7 @@
     "cors": "^2.8.5",
     "dayjs": "^1.11.19",
     "dotenv": "^17.2.3",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "express-validator": "^7.3.1",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.1",
@@ -28,7 +28,7 @@
     "swagger-ui-express": "^5.0.1",
     "web-push": "^3.6.7",
     "winston": "^3.18.3",
-    "yaml": "^2.8.1"
+    "yaml": "^2.8.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"

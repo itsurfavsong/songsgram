@@ -11,7 +11,7 @@ import authMiddleware from '../app/middlewares/auth/auth.middleware.js';
 
 const filesRouter = express.Router();
 
-filesRouter.post('/posts', authMiddleware, multerMiddleware.postUploader, filesController.storePost); // TODO: 컨트롤러 입력 필요하다.
-filesRouter.post('/profiles',authMiddleware, multerMiddleware.profileUploader, filesController.storeProfile); // TODO: 컨트롤러 입력 필요하다.
+filesRouter.post('/posts', authMiddleware, multerMiddleware.postUploader, filesController.storePost);
+filesRouter.post('/profiles',authMiddleware, multerMiddleware.profileUploader, filesController.storeProfile);
 
 export default filesRouter;

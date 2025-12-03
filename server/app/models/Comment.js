@@ -4,7 +4,7 @@
  * 251120 v1.0.0 BSong1 init
  */
 import dayjs from 'dayjs';
-import { DataTypes, Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
 const modelName = 'Comment'; // 모델명(JS 프로그래밍단 내부에서 사용)
 
@@ -92,8 +92,9 @@ const Comment = {  // sequelize 인스턴스 초기화 함수와 associate 함�
     return defineComment;
   },
   associate: (db) => {
-  db.Comment.belongsTo(db.User, { targetKey: 'id', foreignKey: 'userId', as: 'comts-belong-to-u' });
-  db.Comment.belongsTo(db.Post, { targetKey: 'id', foreignKey: 'postId', as: 'comts-belong-to-post' });
+  db.Comment.belongsTo(db.User, { targetKey: 'id', foreignKey: 'userId', as: 'comtsBelongToUser' });
+  db.Comment.belongsTo(db.Post, { targetKey: 'id', foreignKey: 'postId', as: 'comtsBelongToPost' });
+  db.Comment.hasMany(db.Comment, { sourceKey: 'id', foreignKey: 'replyId', as: 'comtHasComts' });
   }
 }
 

@@ -20,6 +20,12 @@ async function destroy(t = null, id) {
   });
 }
 
+async function create(t = null, data) {
+  return await Comment.create(data, { transaction: t });
+}
+
+
 export default {
   destroy,
+  create
 };
