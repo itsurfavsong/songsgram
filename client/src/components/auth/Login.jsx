@@ -1,3 +1,5 @@
+// Login.jsx
+
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import './Login.css'
@@ -37,6 +39,11 @@ export default function Login() { // 비동기라 promise 객체 반환함.
     // }
   }
 
+  // 자바스크립트 코드로..리액트는 이런 기능(redirect)이 없음.
+  function handleSocial(provider) {
+    window.location.replace(`/api/auth/social/${provider}`);
+  }
+
   // ${emailErr ? 'redBorder' : 'greenBorder'} className에 넣을 수 있다.
   return (
     <>
@@ -45,7 +52,7 @@ export default function Login() { // 비동기라 promise 객체 반환함.
         <input type="password" className='input-big-border' onChange={ e => setPassword(e.target.value) } placeholder='password' />
         <button type="submit" className="btn-big bg-gray">Log in</button>
         <div className="text-on-line">or</div>
-        <button type="button" className="btn-big bg-img-kakao"></button>
+        <button type="button" className="btn-big bg-img-kakao" onClick={() => {handleSocial('kakao')}}></button>
         <button type="button" className="btn-big bg-light">Sign up</button>
       </form>
     </>

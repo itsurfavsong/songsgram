@@ -9,6 +9,8 @@ import authService from "../services/auth.service.js";
 import { createBaseResponse } from "../utils/createBaseResponse.util.js";
 import cookieUtil from "../utils/cookie/cookie.util.js";
 import myError from "../errors/customs/my.error.js";
+import PROVIDER from "../middlewares/auth/configs/provider.enunm.js";
+import socialKakaoUtil from "../utils/social/social.kakao.util.js";
 
 // --------------------------------------------------------------------------------------
 // public--------------------------------------------------------------------------------
@@ -71,10 +73,65 @@ async function reissue(req, res, next) {
   }
 }
 
+/**
+ * 소셜로그인 컨트롤러 처리
+ * @param {import("express").Request} req - Request 객체
+ * @param {import("express").Response} res - Response 객체
+ * @param {import("express").NextFunction} next - NextFuction 객체
+ * @returns
+ */
+async function social(req, res, next) {
+  try {
+    const provider = req.params.provider.toUpperCase();
+    let url = '';
+
+    switch (provider) {
+      case PROVIDER.KAKAO:
+        url = socialKakaoUtil.getAuthorizeURL();
+        break;
+    }
+
+    return res.redirect(url) // kakao쪽으로 보낸다. 그래서 send대신 redirect
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * 소셜로그인 콜백 컨트롤러 처리
+ * @param {import("express").Request} req - Request 객체
+ * @param {import("express").Response} res - Response 객체
+ * @param {import("express").NextFunction} next - NextFuction 객체
+ * @returns
+ */
+async function socialCallback(req, res, next) {
+  try {
+    const provider = req.params.provider.toUpperCase();
+    let refreshToken = null;
+    let code = null;
+
+    switch (provider) {
+      case PROVIDER.KAKAO:
+        code = req.query?.code;
+        refreshToken = await authService.socialKakao(code);
+        break;
+    }
+
+    // Cookie에 refreshToken 설정
+    cookieUtil.setCookieRefreshToken(res, refreshToken); // cookie path설정..해야한다.
+
+    return res.redirect(process.env.SOCIAL_CLIENT_CALLBACK_URL); // 소셜 로그인 창이 뜨자마자 프론트에서는 백과 ㅃ2됨. 그래서 다시 로그인이 성공/실패되고 뜨는 창을 설정해줘야된다.
+  } catch (error) {
+    next(error);
+  }
+}
+
 // --------------------------------------------------------------------------------------
 // export--------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
 export const authController = {
   login,
-  reissue
+  reissue,
+  socialCallback,
+  social
 };

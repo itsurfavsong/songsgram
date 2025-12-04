@@ -4,7 +4,8 @@
  * 251119 v1.0.0 BSong1 init
 */
 
-import { body } from "express-validator";
+import { body, param } from "express-validator";
+import PROVIDER from "../../auth/configs/provider.enunm.js";
 
 // 1. 객체 지향-----------------------------------------------------------------------------------
 const email = body('email')
@@ -21,9 +22,21 @@ const password = body('password')
   .matches(/^[a-zA-Z0-9!@#$]{8,20}$/).withMessage('영어대소문자·숫자·!·@·#·$ and 8~20자 허용') // 정규식
 ;
 
+const provider = param('provider')
+  .trim()
+  .notEmpty()
+  .withMessage('필수 항목입니다.')
+  .bail()
+  .custom(val => {
+    return PROVIDER[val.toUpperCase()] ? true : false; // /api/auth/social/kakao 의 kakao 부분 확인 절차
+  })
+  .withMessage('허용하지 않는 값입니다.')
+;
+
 export default {
   email,
-  password
+  password,
+  provider
 };
 
 // 2. 하나하나 따로 내보내는 것 (VSCODE 자동완성 문제 생김)----------------------------------------------

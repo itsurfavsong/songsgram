@@ -4,12 +4,16 @@
  * 251120 BSong1 init
  */
 
+import ROLE from '../middlewares/auth/configs/role.enunm.js'
+import axios from 'axios';
 import bcrypt from 'bcrypt';
 import userRepository from "../repositories/user.repository.js";
 import myError from '../errors/customs/my.error.js';
 import { NOT_REGISTERED_ERROR, REISSUE_ERROR } from '../../configs/responseCode.config.js';
 import jwtUtil from '../utils/jwt/jwt.util.js';
 import db from '../models/index.js';
+import socialKakaoUtil from '../utils/social/social.kakao.util.js';
+import PROVIDER from '../middlewares/auth/configs/provider.enunm.js';
 
 /**
  * 로그인
@@ -97,7 +101,80 @@ async function reissue(token) {
   });
 }
 
+async function socialKakao(code) {
+  // 토큰 획득 요청에 필요한 헤더와 바디 생성을 위해서 작성함.
+  const tokenRequest = socialKakaoUtil.getTokenRequest(code);
+
+  // 토큰 획득 요청
+  const resultToken = await axios.post(
+    process.env.SOCIAL_KAKAO_API_URL_TOKEN,
+    tokenRequest.searchParams,
+    { headers: tokenRequest.headers });
+
+  const { access_token } = resultToken.data; // refreshToken은 필요없다.
+
+  // 사용자 정보 획득 (카카오에서 주는)
+  const userRequest = socialKakaoUtil.getUserRequest(access_token);
+  const resultUser = await axios.post(
+    process.env.SOCIAL_KAKAO_API_URL_USER_INFO,
+    userRequest.searchParams,
+    {
+      headers: userRequest.headers
+    }
+  );
+
+  const kakaoId = resultUser.data.id; // 토큰 필요없을 때 파괴하려고
+  const email = resultUser.data.kakao_account.email;
+  const profile = resultUser.data.kakao_account.profile.thumbnail_image_url;
+  const nick = resultUser.data.kakao_account.profile.nickname;
+
+  // 리프레시 토큰만 받아서 캐쉬에 저장할 거임. 지금은 액세스 토큰을 받아도 프론트에서 무용지물.
+  const refreshToken = db.sequelize.transaction(async t => {
+    // 가입한 회원인지 체크
+    let user = await userRepository.findByEmail(t, email);
+
+    if(!user) {
+      // 미가입 회원이면 회원 가입 처리
+      const data = {
+        email,
+        profile, // 카카오 profile 그대로 저장. 다운로드 처리 필요.
+        nick,
+        password: bcrypt.hashSync(crypto.randomUUID(), 10),
+        provider: PROVIDER.KAKAO,
+        role: ROLE.NORMAL
+      };
+
+      user = await userRepository.create(t, data);
+    } else {
+      // 프로바이더 확인하고 카카오 아니면 변경 (가입했던 사람이라면)
+      if(user.provider !== PROVIDER.KAKAO) {
+        user.provider = PROVIDER.KAKAO;
+      }
+    }
+
+    // 우리 refreshToken 생성 (not kakao's refreshToken)
+    const refreshToken = jwtUtil.generateRefreshToken(user);
+
+    // refreshToken 저장
+    user.refreshToken = refreshToken;
+    await userRepository.save(t, user);
+
+    return refreshToken;
+  });
+
+  // 카카오 로그아웃 처리 (보안상)
+  const logoutRequest = socialKakaoUtil.getLogoutRequest(kakaoId, access_token);
+  await axios.post(
+    process.env.SOCIAL_KAKAO_API_URL_LOGOUT,
+    logoutRequest.searchParams,
+    { headers: logoutRequest.headers }
+  );
+
+  return refreshToken;
+}
+
 export default {
   login,
-  reissue
+  reissue,
+  socialKakao,
 };
