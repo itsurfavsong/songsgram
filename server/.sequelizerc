@@ -1,0 +1,9 @@
+const path = require('path'); // path라는 module을 import한 것이다.
+
+// sequelize-cli 마이그레이션등의 path들을 설정
+module.exports = {
+    config: path.resolve('databases', 'configs', 'sequelize-cli.config.js'), // 상대경로를 -> 절대경로를 가져오는(반환) 함수
+    'models-path': path.resolve('app', 'models'),
+    'seeders-path': path.resolve('databases', 'seeders'),
+    'migrations-path': path.resolve('databases', 'migrations'),
+}
