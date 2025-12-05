@@ -18,6 +18,7 @@ import notFoundRouter from './routes/notFound.router.js';
 import pathUtil from './app/utils/path/path.util.js';
 import cookieParser from 'cookie-parser';
 import commentsRouter from './routes/comments.router.js';
+import commentsRouter from './routes/comments.router.js';
 
 const app = express();
 app.use(express.json()); // JSON 요청 파싱 처리
