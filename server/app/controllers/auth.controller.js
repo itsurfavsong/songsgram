@@ -17,6 +17,7 @@ import socialKakaoUtil from "../utils/social/social.kakao.util.js";
 // --------------------------------------------------------------------------------------
 // 주로 비동기라 동기처리를 해주겠다.
 
+// ----------------------------------------------------로그인 컨트롤러 시작--------------------------------------------
 /**
  * 로그인 컨트롤러 처리
  * @param {import("express").Request} req - Request 객체
@@ -45,8 +46,34 @@ async function login(req, res, next) {
   }
 }
 
+// ----------------------------------------------------로그아웃 컨트롤러 시작--------------------------------------------
 /**
- * 토큰 재 발급 컨트롤러 처리
+ * 로그아웃 컨트롤러 처리
+ * @param {import("express").Request} req - Request 객체
+ * @param {import("express").Response} res - Response 객체
+ * @param {import("express").NextFunction} next - NextFuction 객체
+ * @returns
+ */
+async function logout(req, res, next) {
+  try {
+    const id = req.user.id;
+
+    // 로그아웃 서비스 호출
+    await authService.logout(id);
+
+    // cookie에 refreshToken 만료
+    cookieUtil.clearCookieRefreshToken(res); // 만약 여기가 주석이 된다면 refreshToken이 계속 남아있다. (불필요하게) 로그아웃을 하면 꼭 없어져야하는 것이다.
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS));
+  }
+  catch(error) {
+    next(error);
+  }
+}
+
+// ----------------------------------------------------토큰 재발급 컨트롤러 시작--------------------------------------------
+/**
+ * 토큰 재발급 컨트롤러 처리
  * @param {import("express").Request} req - Request 객체
  * @param {import("express").Response} res - Response 객체
  * @param {import("express").NextFunction} next - NextFuction 객체
@@ -73,8 +100,9 @@ async function reissue(req, res, next) {
   }
 }
 
+// ----------------------------------------------------소셜 로그인 컨트롤러 시작--------------------------------------------
 /**
- * 소셜로그인 컨트롤러 처리
+ * 소셜 로그인 컨트롤러 처리
  * @param {import("express").Request} req - Request 객체
  * @param {import("express").Response} res - Response 객체
  * @param {import("express").NextFunction} next - NextFuction 객체
@@ -97,8 +125,9 @@ async function social(req, res, next) {
   }
 }
 
+// ----------------------------------------------------소셜 로그인 콜백 컨트롤러 시작--------------------------------------------
 /**
- * 소셜로그인 콜백 컨트롤러 처리
+ * 소셜 로그인 콜백 컨트롤러 처리
  * @param {import("express").Request} req - Request 객체
  * @param {import("express").Response} res - Response 객체
  * @param {import("express").NextFunction} next - NextFuction 객체
@@ -131,6 +160,7 @@ async function socialCallback(req, res, next) {
 // --------------------------------------------------------------------------------------
 export const authController = {
   login,
+  logout,
   reissue,
   socialCallback,
   social

@@ -7,6 +7,7 @@
 import express from 'express';
 import './configs/env.config.js';
 import authRouter from './routes/auth.router.js';
+import usersRouter from './routes/users.router.js';
 import filesRouter from './routes/files.router.js';
 import errorHandler from './app/errors/errorHandler.js';
 import postsRouter from './routes/posts.router.js';
@@ -42,6 +43,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/files', filesRouter);
 app.use('/api/posts', postsRouter);
 app.use('/api/comments', commentsRouter);
+app.use('/api/users', usersRouter);
 
 // -----------------------------------------------------------
 // 404 처리

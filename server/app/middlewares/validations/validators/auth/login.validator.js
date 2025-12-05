@@ -6,6 +6,7 @@
 
 // 1. 객체 지향-----------------------------------------------------------------------------------
 import userField from "../../fields/user.field.js"
+
 export default [userField.email, userField.password];
 
 // 2. 하나하나 따로 내보내는 것 (VSCODE 자동완성 문제 생김)--------------------------------------------

@@ -15,6 +15,7 @@ import db from '../models/index.js';
 import socialKakaoUtil from '../utils/social/social.kakao.util.js';
 import PROVIDER from '../middlewares/auth/configs/provider.enunm.js';
 
+// ---------------------------------------------------------------------------------------------------------로그인
 /**
  * 로그인
  * @param {{emali: string, password: string}}} body
@@ -67,6 +68,16 @@ async function login(body) {
   }); // transaction - 이슈가 생기면 롤백해주는 기능
 }
 
+// ---------------------------------------------------------------------------------------------------------로그아웃
+/**
+ * 로그아웃 처리
+ * @param {number} id - 유저id
+ */
+async function logout(id) {
+  return await userRepository.logout(null, id);
+}
+
+// ---------------------------------------------------------------------------------------------------------토큰 재발급 처리
 /**
  * 토큰 재발급 처리
  * @param {string} token
@@ -101,6 +112,7 @@ async function reissue(token) {
   });
 }
 
+// ---------------------------------------------------------------------------------------------------------토큰 획득 요청
 async function socialKakao(code) {
   // 토큰 획득 요청에 필요한 헤더와 바디 생성을 위해서 작성함.
   const tokenRequest = socialKakaoUtil.getTokenRequest(code);
@@ -175,6 +187,7 @@ async function socialKakao(code) {
 
 export default {
   login,
+  logout,
   reissue,
   socialKakao,
 };

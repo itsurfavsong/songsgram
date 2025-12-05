@@ -4,8 +4,7 @@
  * 251204 v1.0.0 BSong1 init
  */
 
-import { header } from "express-validator";
-
+// --------------------------------------------------------------------------------------
 /**
  * 카카오 인가 코드 발급 URL 생성
  * @returns {string} URL
@@ -24,6 +23,7 @@ function getAuthorizeURL() {
   return `${process.env.SOCIAL_KAKAO_API_URL_AUTHORIZE}?${queryParams}`;
 }
 
+// --------------------------------------------------------------------------------------
 /**
  * 카카오 토큰 생성 관련
  * @returns
@@ -45,6 +45,7 @@ function getTokenRequest(code) {
   return { headers, searchParams };
 }
 
+// --------------------------------------------------------------------------------------
 /**
  * 유저 req
  * @returns
@@ -64,6 +65,7 @@ function getUserRequest(token) {
   return { headers, searchParams };
 }
 
+// --------------------------------------------------------------------------------------
 /**
  * 카카오 유저 req
  * @returns

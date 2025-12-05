@@ -5,7 +5,7 @@
  * 251120 v1.0.0 BSong1 init
  */
 
-// 1. 구조 분해형
+// ---------------------------------------------------------------------------이메일 검색----------------
 import db from '../models/index.js';
 const { User } = db;
 
@@ -24,6 +24,23 @@ async function findByEmail(t = null, email) {
   });
 }
 
+// -------------------------------------------------------------------------------닉네임 검색------------
+/**
+ * @param {import("sequelize").Transaction} t
+ * @param {string} nick
+ * @returns {Promise<import("../models/User.js").User>}}
+ */
+async function findByNick(t = null, nick) {
+  // SELECT * FROM users WHERE users.nick = ? AND deleted_at IS NULL
+  return await User.findOne({
+    where: {
+      nick: nick,
+    },
+    transaction: t, // transaction
+  });
+}
+
+// -------------------------------------------------------------------------------------------
 /**
  * 유저 모델 인스턴트로 save 처리
  * @param {import("sequelize").Transaction} t
@@ -34,6 +51,7 @@ async function save(t = null, user) {
   return await user.save({ transaction: t });
 }
 
+// -------------------------------------------------------------------------------------------
 /**
  * 유저id로 조회하는 처리
  * @param {import("sequelize").Transaction} t
@@ -44,15 +62,35 @@ async function findByPk(t = null, id) {
   return await User.findByPk(id, { transaction: t });
 }
 
+// -------------------------------------------------------------------------------------------
 async function create(t = null, data) {
   return await User.create(data, { transaction: t });
 }
 
+// ------------------------------------------------------------------------------------------
+async function logout(t = null, id) { // promise 객체를 반환하는데 rejected or fulfilled 를 안기다리고 걍 진행해버려서 await 필수.
+  return await User.update(
+    {
+      refreshToken: null
+    },
+    {
+      where: {
+        id: id
+      },
+      transaction: t
+    }
+  );
+  // 특정 유저 리프레시 토큰을 null로 갱신
+  // UPDATE users SET refresh_token = null, updated_at = NOW() WHERE id = ?
+}
+
 export default {
   findByEmail,
+  findByNick,
   save,
   findByPk,
-  create
+  create,
+  logout
 };
 
 // 2. 일반형
@@ -61,3 +99,4 @@ export default {
 // async function findByEmail(t = null, email) {
 //   return await db.User
 // }
+
