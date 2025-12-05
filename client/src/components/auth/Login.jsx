@@ -10,7 +10,6 @@ export default function Login() { // 비동기라 promise 객체 반환함.
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [ email, setEmail ] = useState('');
-  // const [ emailErr, setEmailErr ] = useState('');
   const [ password, setPassword ] = useState('');
 
   async function handleLogin(e) {
@@ -31,12 +30,6 @@ export default function Login() { // 비동기라 promise 객체 반환함.
   function validationAndSetEmail(e) {
     const val = e.target.value;
     setEmail(val)
-    // if(/^[0-9]+$/.test(val)) {
-    //   setEmail(e.target.value)
-    //   setEmailErr(null);
-    // } else {
-    //   setEmailErr('이메일 형식 오류');
-    // }
   }
 
   // 자바스크립트 코드로..리액트는 이런 기능(redirect)이 없음.
@@ -45,6 +38,10 @@ export default function Login() { // 비동기라 promise 객체 반환함.
   }
 
   // ${emailErr ? 'redBorder' : 'greenBorder'} className에 넣을 수 있다.
+
+  function redirectRegistration() {
+    return navigate('/registration'); // 로그인 페이지로 돌아오면서 히스토리 남기기
+  }
   return (
     <>
       <form className="login-container" onSubmit={handleLogin}>
@@ -53,10 +50,21 @@ export default function Login() { // 비동기라 promise 객체 반환함.
         <button type="submit" className="btn-big bg-gray">Log in</button>
         <div className="text-on-line">or</div>
         <button type="button" className="btn-big bg-img-kakao" onClick={() => {handleSocial('kakao')}}></button>
-        <button type="button" className="btn-big bg-light">Sign up</button>
+        <button type="button" className="btn-big bg-light" onClick={(redirectRegistration)}>Sign up</button>
       </form>
     </>
   )
 }
 
 
+// ** 다른 방식 **
+  // function validationAndSetEmail(e) {
+  //   const val = e.target.value;
+  //   setEmail(val)
+  //    if(/^[0-9]+$/.test(val)) {
+  //      setEmail(e.target.value)
+  //      setEmailErr(null);
+  //    } else {
+  //      setEmailErr('이메일 형식 오류');
+  //    }
+  // }

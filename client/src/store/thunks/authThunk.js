@@ -1,6 +1,8 @@
+// authThunk.js
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axiosInstance.js";
 
+// 로그인----------------------------------------------------------------------------------------------------
 export const loginThunk = createAsyncThunk(
   'auth/loginThunk',
   async (args, { rejectWithValue }) => {
@@ -17,12 +19,27 @@ export const loginThunk = createAsyncThunk(
   }
 );
 
-// 토큰 재발급
+// 토큰 재발급----------------------------------------------------------------------------------------------------
 export const reissueThunk = createAsyncThunk(
   'auth/reissueThunk',
   async (_, { rejectWithValue }) => { // 쿠키에 실려있는 토큰이 파미로 올거니까 파미 없음.
     try {
       const url = '/api/auth/reissue';
+      const response = await axiosInstance.post(url);
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+// 로그아웃----------------------------------------------------------------------------------------------------
+export const logoutThunk = createAsyncThunk(
+  'auth/logoutThunk',
+  async (_, { rejectWithValue }) => {
+    try {
+      const url = '/api/auth/logout';
       const response = await axiosInstance.post(url);
 
       return response.data;

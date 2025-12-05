@@ -2,7 +2,7 @@ import './PostComment.css';
 
 import PostCommentCreate from './PostCommentCreate.jsx';
 import PostCommentItem from './PostCommentItem.jsx';
-export default function PostComment({ id, comments}) {
+export default function PostComment({ id, comments }) {
 
   return (
     <>

@@ -1,3 +1,4 @@
+// PostShow.jsx
 import { useEffect, useState } from 'react';
 import PostComment from './comments/PostComment.jsx';
 import './PostShow.css';
@@ -49,7 +50,7 @@ export default function PostShow() {
         )
       }
       {
-        openDeleteFlg && <PostDelete setCloseDeleteModal={closeDeleteModal} />
+        openDeleteFlg && <PostDelete id={id} setCloseDeleteModal={closeDeleteModal} />
       }
     </>
   )
