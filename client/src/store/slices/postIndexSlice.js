@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { postIndexThunk } from '../thunks/postIndexThunk.js';
+import { postDeleteThunk } from '../thunks/postDeleteThunk.js';
 
 const initialState = {
   list: null,
@@ -34,6 +35,13 @@ const slice = createSlice ({
         // 마지막 페이지 여부 플래그 저장
         state.isLasted = (page * limit) >= count;
       })
+      .addCase(postDeleteThunk.fulfilled, (state, action) => {
+        const deletedId = action.meta.arg;
+
+        if (!state.list) return;
+
+        state.list = state.list.filter((post) => post.id !== deletedId);
+      });
   }
 });
 

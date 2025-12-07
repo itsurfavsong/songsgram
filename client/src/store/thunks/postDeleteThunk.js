@@ -15,3 +15,17 @@ export const postDeleteThunk = createAsyncThunk(
     }
   }
 );
+
+export const clearPostDelete = createAsyncThunk(
+  'postShow/clearPostDelete', // Thunk 고유명
+  async (_, { rejectWithValue }) => {
+    try {
+      const url = '/api/posts/clearDelete';
+      const response = await axiosInstance.delete(url);
+
+      return response.data;
+    } catch(error) {
+      return rejectWithValue(error);
+    }
+  }
+);

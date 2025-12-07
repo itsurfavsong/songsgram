@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './PostCommentItem.css';
 import PostCommentCreate from './PostCommentCreate.jsx';
+import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { postCommentDeleteThunk } from '../../../store/thunks/commentDeleteThunk.js';
 
 export default function PostCommentItem({comment, depth = 1}) {
   // 재귀 호출 시 대댓글 인덴트 조절
@@ -11,6 +14,26 @@ export default function PostCommentItem({comment, depth = 1}) {
   function changeReplyFlg() {
     setOpenReplyFlg(!openReplyFlg);
   }
+
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const [openDeleteFlg, setOpenDeleteFlg] = useState(false);
+
+  useEffect(() => {
+    dispatch(postCommentDeleteThunk(id));
+
+    return () => {
+      dispatch();
+    }
+  }, []);
+
+  function openDeleteModal() {
+    setOpenDeleteFlg(true);
+  }
+  function closeDeleteModal() {
+    setOpenDeleteFlg(false);
+  }
+
   return (
     <>
       <div className="post-comment-item-box" key={comment.id}>
@@ -37,6 +60,10 @@ export default function PostCommentItem({comment, depth = 1}) {
               })
             }
           </div>
+          <div className="icon-delete" onClick={openDeleteModal} ></div>
+          {
+            openDeleteFlg && <PostDelete id={id} setCloseDeleteModal={closeDeleteModal} />
+          }
         </div>
       </div>
     </>

@@ -1,17 +1,17 @@
-import './PostDelete.css';
+import { postCommentDeleteThunk } from '../../../store/thunks/commentDeleteThunk';
+import './PostCommentDelete.css';
 import { useDispatch } from 'react-redux';
-import { postDeleteThunk, clearPostDelete } from '../../store/thunks/postDeleteThunk.js';
 
-export default function PostDelete({ id, setCloseDeleteFlg }) {
+export default function PostCommentDelete({ id, setCloseDeleteFlg }) {
   const dispatch = useDispatch();
 
   async function handleDelete() {
     try {
-      const result = await dispatch(postDeleteThunk(id));
+      const result = await dispatch(postCommentDeleteThunk(id));
 
-      if (postDeleteThunk.fulfilled.match(result)) {
-        alert("게시글이 삭제되었습니다.");
-        dispatch(clearPostDelete());
+      if (postCommentDeleteThunk.fulfilled.match(result)) {
+        alert("댓글이 삭제되었습니다.");
+        dispatch();
         return setCloseDeleteFlg();;
       } else {
         alert("삭제에 실패했습니다.");
@@ -31,7 +31,7 @@ export default function PostDelete({ id, setCloseDeleteFlg }) {
       <div className="post-delete-container">
         <div className="post-delete-content-box bg-light">
           <div className="post-delete-content-info">
-            <p>삭제된 게시글은 되돌릴 수 없습니다.</p>
+            <p>삭제된 댓글은 되돌릴 수 없습니다.</p>
             <br />
             <p>정말 삭제하시겠습니까?</p>
           </div>

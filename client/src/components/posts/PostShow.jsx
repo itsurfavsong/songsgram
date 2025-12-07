@@ -13,6 +13,7 @@ export default function PostShow() {
   const dispatch = useDispatch();
   const { show } = useSelector(state => state.postShow);
   const [openDeleteFlg, setOpenDeleteFlg] = useState(false);
+  const [likes, setLikes] = useState(0);
 
   useEffect(() => {
     dispatch(postShowThunk(id));
@@ -29,6 +30,10 @@ export default function PostShow() {
     setOpenDeleteFlg(false);
   }
 
+  const handleClick = () => {
+    setLikes(likes + 1);
+  };
+
   return (
     <>
       {
@@ -39,8 +44,8 @@ export default function PostShow() {
               <div className="post-show-post-info-items">
                 <div className="icon-delete" onClick={openDeleteModal} ></div>
                 <div className="post-show-post-likes-items">
-                  <p>1919</p>
-                  <div className='icon-heart-fill'></div>
+                  <p>{likes}</p>
+                  <button className='icon-heart-fill' onClick={handleClick}></button>
                 </div>
               </div>
               <textarea className="post-show-post-constent" defaultValue={show.content}></textarea>
