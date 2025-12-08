@@ -43,7 +43,7 @@ export default function Header() {
     <>
       <div className="header-container">
         <div className={`${(onlyTitleFlg && 'header-top') || 'bottom-line header-top-grid'}`}>
-          <h1 className={`${(onlyTitleFlg && 'header-top-title-only') || ''}`} onChange={redirectPosts}>Meerkatgram</h1>
+          <h1 className={`${(onlyTitleFlg && 'header-top-title-only') || ''}`} onChange={redirectPosts}>Songsgram</h1>
           {
             !onlyTitleFlg && (
               <div className='header-top-btn-box'>

@@ -1,6 +1,6 @@
+import './PostIndex.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import './PostIndex.css';
 import { useEffect } from 'react';
 import { postIndexThunk } from '../../store/thunks/postIndexThunk.js';
 import { clearPostIndex } from '../../store/slices/postIndexSlice.js';
