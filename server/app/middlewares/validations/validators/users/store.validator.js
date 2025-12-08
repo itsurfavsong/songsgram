@@ -4,6 +4,6 @@
  * 251205 v1.0.0 BSong init
  */
 
-import { email, password, passwordCk, nick, profile } from "../../fields/user.field.js";
+import userFields from "../../fields/user.field.js";
 
-export default [email, password, passwordCk, nick, profile];
+export default [userFields.email, userFields.password, userFields.passwordCk, userFields.nick, userFields.profile];

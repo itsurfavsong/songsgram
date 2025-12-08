@@ -20,6 +20,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/posts$/, roles: [NORMAL, SUPER] },
     { path: /^\/api\/comments$/, roles: [NORMAL, SUPER] },
     { path: /^\/api\/files\/posts$/, roles: [NORMAL, SUPER] },
+    { path: /^\/api\/subscriptions$/, roles: [NORMAL, SUPER] }
     // { path: /^\/api\/files\/profiles$/, roles: [NORMAL, SUPER] } 체크대상이 되니까 지워줘야됨. middleware로 가는...
   ],
   PUT: [

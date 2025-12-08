@@ -16,7 +16,7 @@ const email = body('email')
   .notEmpty().withMessage('이메일은 필수 항목 입니다.')
   .bail() // kind of 'break'
   .isEmail().withMessage('유효한 이메일을 입력해주세요.')
-  ;
+;
 
 const password = body('password')
   .trim()
