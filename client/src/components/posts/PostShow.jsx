@@ -50,7 +50,7 @@ export default function PostShow() {
               </div>
               <textarea className="post-show-post-constent" defaultValue={show.content}></textarea>
             </div>
-            <PostComment id={id} comments={show.comts} />
+            <PostComment id={id} comments={show.postHasComts} />
           </div>
         )
       }

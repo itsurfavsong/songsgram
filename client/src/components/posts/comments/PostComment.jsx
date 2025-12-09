@@ -2,7 +2,14 @@ import './PostComment.css';
 
 import PostCommentCreate from './PostCommentCreate.jsx';
 import PostCommentItem from './PostCommentItem.jsx';
+
 export default function PostComment({ id, comments }) {
+
+  const safeComments = Array.isArray(comments)
+    ? comments
+    : comments
+      ? [comments]   // 객체 하나면 [객체]
+      : [];          // null/undefined면 빈 배열
 
   return (
     <>
@@ -14,11 +21,11 @@ export default function PostComment({ id, comments }) {
         <div className="post-comment-item-container">
           {
             // 'comments' 배열의 각 댓글 객체를 PostCommentItem 컴포넌트로 변환
-            ((comments && comments.length > 0) && (comments.map(comment => {
+            (safeComments.map(comment => {
               return (
                 <PostCommentItem comment={comment} key={comment.id} />
               )
-            })))
+            }))
           }
         </div>
       </div>
